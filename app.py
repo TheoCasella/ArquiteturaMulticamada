@@ -1,5 +1,5 @@
 from flask import Flask
-from src.presentation.livro_controller import livro_bp
+from src.Apresentacao.livro_controller import livro_bp
 
 app = Flask(__name__)
 app.register_blueprint(livro_bp)

@@ -2,7 +2,7 @@
 Onde a lógica do código acontece, como por exemplo filtrar livros, aplicar desconte
 '''
 
-from src.infrastructure.livro_repository import LivroRepository
+from src.Dados.livro_repository import LivroRepository
 
 class LivroService:
     def __init__(self):
@@ -15,13 +15,13 @@ class LivroService:
             return todos
         return [l for l in todos if termo.lower() in l['titulo'].lower()]
 
-    def aplicar_desconto_em_massa(self, percentual):
-        if self.desconto_aplicado:
-            return self.repo.get_all()
+    def aplicar_desconto(self, percentual):
+        if self.foi_aplicado:
+            return None  # Sinaliza que já foi usado
 
         livros = self.repo.get_all()
         for l in livros:
-            l['preco'] -= (l['preco'] * (percentual / 100))
+            l['preco'] *= (1 - percentual / 100)
 
-        self.desconto_aplicado = True
+        self.foi_aplicado = True
         return livros
