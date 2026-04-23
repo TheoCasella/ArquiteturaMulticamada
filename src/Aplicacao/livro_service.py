@@ -16,12 +16,12 @@ class LivroService:
         return [l for l in todos if termo.lower() in l['titulo'].lower()]
 
     def aplicar_desconto(self, percentual):
-        if self.foi_aplicado:
+        if self.desconto_aplicado:
             return None  # Sinaliza que já foi usado
 
         livros = self.repo.get_all()
         for l in livros:
             l['preco'] *= (1 - percentual / 100)
 
-        self.foi_aplicado = True
+        self.desconto_aplicado = True
         return livros
