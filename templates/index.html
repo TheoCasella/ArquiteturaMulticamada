@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livraria Digital - Engenharia de Software</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <nav class="bg-indigo-700 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold flex items-center gap-2">
+                <i class="fas fa-book-open"></i> LibDoc IA
+            </h1>
+            <div class="flex gap-4">
+                <button onclick="aplicarDesconto()" class="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-lg text-sm font-semibold transition">
+                    <i class="fas fa-tag"></i> Aplicar 10% OFF
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="container mx-auto mt-10 px-4 text-center">
+        <h2 class="text-3xl font-extrabold text-gray-800">Encontre sua próxima leitura</h2>
+        <p class="text-gray-600 mt-2">Protótipo de Arquitetura Multicamada - Módulo 5</p>
+
+        <div class="max-w-xl mx-auto mt-8 flex shadow-md rounded-lg overflow-hidden">
+            <input type="text" id="searchInput" placeholder="Busque por título ou autor..."
+                   class="w-full px-6 py-3 outline-none border-none text-gray-700">
+            <button onclick="buscarLivros()" class="bg-indigo-600 text-white px-8 py-3 hover:bg-indigo-800 transition">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container mx-auto my-12 px-4">
+        <div id="livrosContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="animate-pulse flex flex-col items-center">
+                <div class="bg-gray-300 h-64 w-full rounded-xl"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Função para renderizar os cards
+        function renderizarLivros(livros) {
+    const container = document.getElementById('livrosContainer');
+    container.innerHTML = '';
+    livros.forEach(livro => {
+        container.innerHTML += `
+            <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+                <div class="h-48 bg-indigo-100 flex items-center justify-center text-indigo-300">
+                    <i class="fas fa-book fa-4x"></i>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-bold text-xl text-gray-800">${livro.titulo}</h3>
+                    <p class="text-gray-500 text-sm mb-4">Por: ${livro.autor}</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-2xl font-bold text-indigo-600">R$ ${livro.preco.toFixed(2)}</span>
+                        <button onclick="abrirModal('${livro.titulo}')" class="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-black transition">
+                            Detalhes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+}
+
+        // Chamada à Camada de Apresentação (API)
+        async function buscarLivros() {
+            const termo = document.getElementById('searchInput').value;
+            const response = await fetch(`/api/buscar?q=${termo}`);
+            const dados = await response.json();
+            renderizarLivros(dados);
+        }
+
+        // Chamada para a Nova Feature de Desconto
+        async function aplicarDesconto() {
+    const response = await fetch('/api/promocao', { method: 'POST' });
+    const dados = await response.json();
+    renderizarLivros(dados);
+    // Opcional: Desabilitar o botão visualmente após o clique
+}
+    function abrirModal(titulo) {
+        const modal = document.getElementById('modalQRCode');
+        const img = document.getElementById('qrCodeImg');
+        // Gera um QR Code fixo baseado no título do livro
+        const qrData = encodeURIComponent(`Pagamento do livro: ${titulo}`);
+        img.src = `https://chart.googleapis.com/chart?cht=qr&chl=${qrData}&chs=200x200`;
+        modal.classList.remove('hidden');
+    }
+
+    function fecharModal() {
+    document.getElementById('modalQRCode').classList.add('hidden');
+}
+        // Carregamento inicial
+        window.onload = buscarLivros;
+    </script>
+    <div id="modalQRCode" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-2xl text-center max-w-sm w-full">
+        <h3 class="text-xl font-bold mb-4">Pagamento via PIX</h3>
+        <img id="qrCodeImg" src="" alt="QR Code" class="mx-auto mb-4 border p-2">
+        <p class="text-sm text-gray-600 mb-6">Escaneie para finalizar a compra do livro.</p>
+        <button onclick="fecharModal()" class="bg-indigo-600 text-white px-6 py-2 rounded-lg w-full">Fechar</button>
+    </div>
+</div>
+</body>
+</html>
