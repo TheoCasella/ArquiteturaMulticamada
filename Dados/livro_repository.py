@@ -1,21 +1,30 @@
-'''
-Onde os dados são armazenados, simulando um Banco de Dados
-'''
+from abc import ABC, abstractmethod
 
-class LivroRepository:
-    def __init__(self):
-        # Simula o banco de dados em memória
-        self._livros = [
-            {"id": 1, "titulo": "Clean Code", "autor": "Robert Martin", "preco": 95.0},
-            {"id": 2, "titulo": "Design Patterns", "autor": "GoF", "preco": 120.0},
-            {"id": 3, "titulo": "Dom Casmurro", "autor": "Machado de Assis", "preco": 45.90},
-            {"id": 4, "titulo": "Memórias Postumas", "autor": "Machado de Assis", "preco": 39.90},
-            {"id": 5, "titulo": "O Cortiço", "autor": "Aluísio Azevedo", "preco": 35.00},
-            {"id": 6, "titulo": "Quincas Borba", "autor": "Machado de Assis", "preco": 42.00}
-        ]
+# Define O QUE deve ser feito, mas não COMO.
+class IRepositorioLivro(ABC):
+
+    @abstractmethod
+    def get_all(self):
+        """Retorna todos os livros do banco de dados real"""
+        pass
+
+    @abstractmethod
+    def save(self, livro):
+        """Salva um novo livro no banco de dados real"""
+        pass
+
+# Aqui é onde usar SQL
+class LivroRepository(IRepositorioLivro):
+    def __init__(self, conexao_banco=None):
+        # Aqui você receberia a string de conexão ou o objeto do banco
+        self.db = conexao_banco
 
     def get_all(self):
-        return self._livros
+        # Simulando onde entraria a lógica de banco real
+        # Exemplo: return self.db.execute("SELECT * FROM livros")
+        print("Buscando dados no Banco de Dados Real...")
+        return []  # Retorna vazio por enquanto já que não há banco real
 
-    def save(self, livro_dict):
-        self._livros.append(livro_dict)
+    def save(self, livro):
+        # Exemplo: self.db.execute("INSERT INTO...", livro)
+        print(f"Salvando o livro '{livro['titulo']}' no Banco de Dados Real...")

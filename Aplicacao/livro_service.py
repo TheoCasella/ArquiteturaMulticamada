@@ -2,7 +2,7 @@
 Onde a lógica do código acontece, como por exemplo filtrar livros, aplicar desconte
 '''
 
-from Dados.livro_repository import LivroRepository
+from Stub.livro_database import LivroRepository
 
 class LivroService:
     def __init__(self):
