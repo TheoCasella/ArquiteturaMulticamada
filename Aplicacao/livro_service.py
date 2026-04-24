@@ -25,3 +25,8 @@ class LivroService:
 
         self.desconto_aplicado = True
         return livros
+
+    def pesquisar_livros(self, termo):
+        if len(termo) < 3:
+            return []
+        return self.repo.buscar_por_termo(termo)

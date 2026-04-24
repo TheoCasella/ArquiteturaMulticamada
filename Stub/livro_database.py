@@ -18,3 +18,7 @@ class LivroRepositoryStub(IRepositorioLivro): # Agora ele herda do esqueleto!
 
     def save(self, livro_dict):
         self._livros.append(livro_dict)
+
+    def buscar_por_termo(self, termo):
+        termo = termo.lower()
+        return [l for l in self._livros if termo in l['titulo'].lower() or termo in l['autor'].lower()]
