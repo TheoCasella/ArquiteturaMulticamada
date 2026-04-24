@@ -1,61 +1,49 @@
-# 📚 Livraria Digital - Exercício de Arquitetura Multicamada
+# Arquitetura Multicamada em Python
 
-Este projeto é um protótipo de uma Livraria Digital desenvolvido para o exercício de Engenharia de Software. O objetivo principal foi refatorar um MVP (Produto Mínimo Viável) com arquitetura MVC para uma **Arquitetura Multicamada (N-Tier)** de 4 níveis, garantindo a separação de preocupações e integridade dos dados.
+Este projeto demonstra a implementação de uma **Arquitetura Multicamada (N-Tier)**, focada na separação de responsabilidades, facilidade de manutenção e testabilidade através do uso de **Interfaces** e **Injeção de Dependência**.
 
-## 🏗️ Arquitetura do Projeto
+---
 
-O sistema foi dividido em 4 camadas distintas dentro do diretório `src/`, seguindo o fluxo de dependência:
+## 🏗️ Estrutura do Projeto
+O projeto está dividido em quatro camadas principais, seguindo o fluxo de comunicação definido:
 
+### 1. Apresentação (`/Apresentacao`)
+* **Responsabilidade:** Interface com o usuário/sistema externo.
+* **Conteúdo:** Controllers e rotas da API.
+* **Fluxo:** Recebe a requisição e aciona a camada de **Negócio**.
 
+### 2. Negócio (`/Negocio`)
+* **Responsabilidade:** Contém as regras de negócio e a lógica da aplicação.
+* **Conteúdo:** `Services`.
+* **Diferencial:** Não sabe de onde os dados vêm. Ela depende apenas de uma **Interface** definida na camada de Dados.
 
-1.  **Apresentação (Presentation):** Responsável pelas rotas Flask e renderização da interface (HTML/JS).
-2.  **Aplicação (Application):** Onde residem as regras de negócio e os serviços. Aqui é controlada a lógica de aplicação de descontos únicos.
-3.  **Negócio (Domain):** Contém as entidades e definições de dados fundamentais do sistema.
-4.  **Dados (Infrastructure):** Camada de persistência que gerencia o armazenamento dos dados (atualmente em memória).
+### 3. Dados (`/Dados`)
+* **Responsabilidade:** Define o contrato de persistência e a implementação real.
+* **Conteúdo:** * `IRepositorioLivro`: Classe abstrata (Interface) que define os métodos obrigatórios.
+    * `LivroRepository`: Implementação voltada para um banco de dados real (MySQL/SQLite).
 
-## 🚀 Funcionalidades Implementadas
+### 4. Stub (`/Stub`)
+* **Responsabilidade:** Simulação de persistência para desenvolvimento e testes.
+* **Conteúdo:** `LivroRepositoryStub`.
+* **Uso:** Permite rodar o projeto inteiramente em memória, sem necessidade de configurar um banco de dados externo.
 
--   **Listagem de Livros:** Exibição dinâmica de títulos consumindo uma API interna.
--   **Sistema de Promoção (Idempotência):** Implementação de uma regra de negócio que permite a aplicação de 10% de desconto apenas uma vez.
--   **Interface Responsiva:** Desenvolvida com Tailwind CSS.
--   **Checkout com QR Code:** Geração de QR Code dinâmico para simulação de pagamento via PIX ao clicar em "Detalhes".
--   **Tratamento de Erros:** Pop-up informativo caso o usuário tente aplicar o desconto mais de uma vez.
+---
 
-## 🛠️ Tecnologias Utilizadas
+## 🔄 Fluxo de Dados
+A comunicação entre as camadas é bem definida para evitar o acoplamento:
 
--   **Linguagem:** Python 3.x
--   **Framework Web:** Flask
--   **Estilização:** Tailwind CSS
--   **Ícones:** FontAwesome
--   **API de Terceiros:** QRServer (para geração de QR Codes)
+> **Apresentação** ➔ **Negócio (Service)** ➔ **Interface (Dados)** ➔ **Implementação (Stub ou Real)**
 
-## 📦 Como Rodar o Projeto
+---
 
-1.  **Clone o repositório:**
-    ```bash
-    git clone <url-do-seu-repositorio>
-    cd Exercicio_Arquitetura
-    ```
+## 🛠️ Tecnologias e Conceitos Aplicados
+* **Python 3.x**
+* **Inversão de Dependência:** O Service recebe o repositório no construtor, permitindo trocar o Banco Real pelo Stub facilmente.
+* **Classes Abstratas (abc):** Garantia de que todos os repositórios sigam o mesmo padrão de métodos.
 
-2.  **Crie e ative um ambiente virtual:**
-    ```bash
-    python -m venv venv
-    # Windows:
-    venv\Scripts\activate
-    # Linux/Mac:
-    source venv/bin/activate
-    ```
+---
 
-3.  **Instale as dependências:**
-    ```bash
-    pip install flask
-    ```
-
-4.  **Execute a aplicação:**
-    ```bash
-    python app.py
-    ```
-5.  **Acesse no navegador:** `http://127.0.0.1:5000`
-
-## 📄 Licença
-Este projeto foi desenvolvido para fins educacionais na disciplina de Engenharia de Software.
+## 🚀 Como executar
+1. **Clone o repositório:**
+   ```bash
+   git clone [https://github.com/TheoCasella/ArquiteturaMulticamada.git](https://github.com/TheoCasella/ArquiteturaMulticamada.git)
