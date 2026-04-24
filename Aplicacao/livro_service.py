@@ -2,11 +2,11 @@
 Onde a lógica do código acontece, como por exemplo filtrar livros, aplicar desconte
 '''
 
-from Stub.livro_database import LivroRepository
+from Stub.livro_database import LivroRepositoryStub
 
 class LivroService:
     def __init__(self):
-        self.repo = LivroRepository()
+        self.repo = LivroRepositoryStub()
         self.desconto_aplicado = False
 
     def filtrar_livros(self, termo):

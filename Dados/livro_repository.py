@@ -13,10 +13,9 @@ class IRepositorioLivro(ABC):
         """Salva um novo livro no banco de dados real"""
         pass
 
-# Aqui é onde usar SQL
+
 class LivroRepository(IRepositorioLivro):
     def __init__(self, conexao_banco=None):
-        # Aqui você receberia a string de conexão ou o objeto do banco
         self.db = conexao_banco
 
     def get_all(self):
