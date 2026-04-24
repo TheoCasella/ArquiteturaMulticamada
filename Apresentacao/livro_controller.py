@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, render_template
-from src.Aplicacao.livro_service import LivroService
+from Aplicacao.livro_service import LivroService
 
 livro_bp = Blueprint('livro', __name__)
 service = LivroService()
